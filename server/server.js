@@ -7,7 +7,14 @@ const { Employee, Attendance } = require('./models');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-connectDB();
+connectDB().then(async () => {
+    const employees = await Employee.find().select('_id');
+    const validIds = employees.map(e => e._id);
+    const result = await Attendance.deleteMany({ employee_id: { $nin: validIds } });
+    if (result.deletedCount > 0) {
+        console.log(`Cleaned ${result.deletedCount} orphaned attendance records`);
+    }
+});
 
 app.use(cors());
 app.use(bodyParser.json());
