@@ -70,6 +70,10 @@ app.delete('/api/employees/:id', async (req, res) => {
         if (!result) {
             return res.status(404).json({ error: "Employee not found" });
         }
+
+        // Cascade delete: Remove all attendance records for this employee
+        await Attendance.deleteMany({ employee_id: req.params.id });
+
         res.json({ message: "deleted", data: result });
     } catch (err) {
         res.status(400).json({ error: "Invalid ID format or error deleting" });
