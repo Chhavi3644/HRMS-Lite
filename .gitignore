@@ -1,0 +1,9 @@
+node_modules/
+server/node_modules/
+client/node_modules/
+.env
+.DS_Store
+dist/
+coverage/
+server/hrms.db
+server/hrms.db-journal
